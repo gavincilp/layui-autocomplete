@@ -94,7 +94,7 @@ Here is the complete one
     })
 </script>
 ```
-![Alt text](example.png)
+![样例图](/example.png)
 
 Check above example in example folder please.
 
