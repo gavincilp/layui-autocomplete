@@ -1,0 +1,15 @@
+.layui-autocomplete-item {
+    padding: 5px;
+    cursor: pointer;
+}
+
+.layui-autocomplete-item:hover,
+.layui-autocomplete-active {
+    background-color: #5FB878;
+    color: white
+}
+
+.layui-input:disabled {
+    background: #eee;
+    cursor: not-allowed;
+}
