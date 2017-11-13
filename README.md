@@ -41,7 +41,7 @@ You just need write a standard layui input as following
 then in your module
 ```javascript
 layui.autocomplete({
-    element: '#user-department',
+    element: '#user-department', // 必填项
     array: departmentList
 })
 ```
@@ -59,7 +59,7 @@ Here is the complete one
         url: 'url', /*remote url, where you can fetch data, a param 'search' will pass the words you input with post method.*/
         query: {},/* what you may want to put into remote query also*/
         resArray: 'data', /* which real data list property name in remote respose */
-        element: '#cssselector', /*the input element css selector*/
+        element: '#cssselector', /*the input element css selector, required no matter you create or update*/
         count: 10, /* how many to display most in the search list*/
         done: function /*if you want to do something after an item is selected, then write a function here. And the selected item will be passed.*/
     }
