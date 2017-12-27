@@ -21,7 +21,7 @@ layui.define(['jquery'], function (exports) {
         } else {
             option = $.extend(defaultOption, tmpOption)
             var $out = $('<div></div>')
-            $out.css('display:relative')
+            $out.css('position','relative')
 
             $el.after($out)
             $el.remove()
@@ -37,10 +37,11 @@ layui.define(['jquery'], function (exports) {
             $out.append($panel)
             $panel.on('click', '.layui-autocomplete-item', function (e) {
                 select(e.target)
-            })
-            $panel.css('top', $el.height()).css('width', $el.width() - 10)
+                e.preventDefault()
+            })          
 
             function display(tempArray) {
+                $panel.css('top', $el.height()).css('width', $el.width() - 10)
                 $panel.empty()
                 for (var i = 0; i < tempArray.length && i < option.count; i++) {
                     var temp
@@ -121,7 +122,9 @@ layui.define(['jquery'], function (exports) {
             })
 
             $el.blur(function () {
-                $panel.hide(500)
+                setTimeout(function(){
+                    $panel.hide(500)
+                },100)                
             })
         }
         $el.data('option', option)
