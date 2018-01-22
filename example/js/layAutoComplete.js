@@ -19,9 +19,9 @@ layui.define(['jquery'], function (exports) {
         if ($el.data('option')) {
             option = $.extend($el.data('option'), tmpOption)
         } else {
-            option = $.extend(defaultOption, tmpOption)
+            option = $.extend({}, defaultOption, tmpOption)
             var $out = $('<div></div>')
-            $out.css('display:relative')
+            $out.css('position','relative')
 
             $el.after($out)
             $el.remove()
@@ -37,10 +37,11 @@ layui.define(['jquery'], function (exports) {
             $out.append($panel)
             $panel.on('click', '.layui-autocomplete-item', function (e) {
                 select(e.target)
-            })
-            $panel.css('top', $el.height()).css('width', $el.width() - 10)
+                e.preventDefault()
+            })          
 
             function display(tempArray) {
+                $panel.css('top', $el.height()).css('width', $el.width() - 10)
                 $panel.empty()
                 for (var i = 0; i < tempArray.length && i < option.count; i++) {
                     var temp
@@ -70,7 +71,8 @@ layui.define(['jquery'], function (exports) {
                 }
                 $panel.hide()
             }
-            $el.keydown(function (e) {
+            var debounceTimeout;
+            $el.keyup(function (e) {
                 if (e.which == 40 && $panel.css('display') != 'none') {
                     var $active = $panel.find('.layui-autocomplete-active')
                     if ($active.length > 0 && $active.next().length > 0) {
@@ -110,9 +112,12 @@ layui.define(['jquery'], function (exports) {
                         }
                         display(tempArray)
                     } else {
-                        $.post(option.url, query, function (res) {
-                            display(res[resArray])
-                        })
+                        clearTimeout(debounceTimeout)
+                        debounceTimeout=setTimeout(function(){
+                            $.post(option.url, $.extend({search:value},option.query), function (res) {
+                                display(res[resArray])
+                            })
+                        },500);
                     }
                 } else {
                     $panel.empty()
@@ -121,7 +126,9 @@ layui.define(['jquery'], function (exports) {
             })
 
             $el.blur(function () {
-                $panel.hide(500)
+                setTimeout(function(){
+                    $panel.hide(500)
+                },100)                
             })
         }
         $el.data('option', option)
