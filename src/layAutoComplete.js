@@ -19,7 +19,7 @@ layui.define(['jquery'], function (exports) {
         if ($el.data('option')) {
             option = $.extend($el.data('option'), tmpOption)
         } else {
-            option = $.extend(defaultOption, tmpOption)
+            option = $.extend({}, defaultOption, tmpOption)
             var $out = $('<div></div>')
             $out.css('position','relative')
 
@@ -71,7 +71,8 @@ layui.define(['jquery'], function (exports) {
                 }
                 $panel.hide()
             }
-            $el.keydown(function (e) {
+            var debounceTimeout;
+            $el.keyup(function (e) {
                 if (e.which == 40 && $panel.css('display') != 'none') {
                     var $active = $panel.find('.layui-autocomplete-active')
                     if ($active.length > 0 && $active.next().length > 0) {
@@ -111,9 +112,12 @@ layui.define(['jquery'], function (exports) {
                         }
                         display(tempArray)
                     } else {
-                        $.post(option.url, query, function (res) {
-                            display(res[resArray])
-                        })
+                        clearTimeout(debounceTimeout)
+                        debounceTimeout=setTimeout(function(){
+                            $.post(option.url, $.extend({search:value},option.query), function (res) {
+                                display(res[resArray])
+                            })
+                        },500);
                     }
                 } else {
                     $panel.empty()
